@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Search #{{ search['id'] }}</h2>
+  <p><strong>Source:</strong> <a href="{{ search['source_url'] }}" target="_blank">{{ search['source_url'] }}</a></p>
+  <p><strong>Keywords:</strong> {{ search['keywords'] }}</p>
+  <p><strong>Location:</strong> {{ search['location'] or '-' }}</p>
+  <form method="post" action="{{ url_for('trigger_scan', search_id=search['id']) }}">
+    <button type="submit">Run Scan</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Results</h2>
+  <p>Statuses used: job_found/matched, email_found, draft_created, no_email_found, manual_apply_required, captcha_detected, failed.</p>
+  {% if results %}
+  <table>
+    <thead>
+      <tr>
+        <th>Job title</th>
+        <th>Company</th>
+        <th>Listing</th>
+        <th>Company site</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Draft</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in results %}
+      <tr>
+        <td>{{ row['job_title'] or '-' }}</td>
+        <td>{{ row['company_name'] or '-' }}</td>
+        <td>{% if row['listing_url'] %}<a href="{{ row['listing_url'] }}" target="_blank">Open</a>{% else %}-{% endif %}</td>
+        <td>{% if row['company_website'] %}<a href="{{ row['company_website'] }}" target="_blank">Open</a>{% else %}-{% endif %}</td>
+        <td>{{ row['contact_email'] or '-' }}</td>
+        <td class="status">{{ row['status'] }}</td>
+        <td>
+          {% if row['draft_id'] %}
+            {{ row['draft_mode'] }} draft: {{ row['draft_id'] }}
+            {% if row['draft_link'] %}<br/><a href="{{ row['draft_link'] }}" target="_blank">Open Gmail draft</a>{% endif %}
+            {% if row['draft_subject'] %}<br/><small><strong>{{ row['draft_subject'] }}</strong></small>{% endif %}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ row['note'] or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No results yet. Run a scan.</p>
+  {% endif %}
+</div>
+{% endblock %}
