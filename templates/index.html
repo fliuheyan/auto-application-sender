@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Create Search</h2>
+  <form method="post" action="{{ url_for('create_search') }}" enctype="multipart/form-data">
+    <label>Job source website URL</label>
+    <input name="source_url" placeholder="https://example-job-site.com/search" required />
+
+    <label>Keywords (comma-separated)</label>
+    <input name="keywords" placeholder="software engineer, python" required />
+
+    <label>Optional location</label>
+    <input name="location" placeholder="Berlin" />
+
+    <label>Resume file (pdf/doc/docx/txt)</label>
+    <input type="file" name="resume_file" />
+
+    <label>Cover letter file (pdf/doc/docx/txt)</label>
+    <input type="file" name="cover_letter_file" />
+
+    <label>Cover letter text (optional)</label>
+    <textarea rows="5" name="cover_letter_text" placeholder="If no file is uploaded, you can keep text here for reference"></textarea>
+
+    <button type="submit">Save Search</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Saved Searches</h2>
+  {% if searches %}
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Source</th>
+        <th>Keywords</th>
+        <th>Location</th>
+        <th>Created</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for search in searches %}
+        <tr>
+          <td>{{ search['id'] }}</td>
+          <td><a href="{{ search['source_url'] }}" target="_blank">{{ search['source_url'] }}</a></td>
+          <td>{{ search['keywords'] }}</td>
+          <td>{{ search['location'] or '-' }}</td>
+          <td>{{ search['created_at'] }}</td>
+          <td><a href="{{ url_for('view_search', search_id=search['id']) }}">Open</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No searches yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

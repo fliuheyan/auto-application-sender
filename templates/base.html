@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Application Assistant MVP</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f8fafc; }
+    h1, h2 { color: #1e293b; }
+    .card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #e2e8f0; padding: 0.5rem; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+    .status { font-weight: bold; }
+    .flash { background: #dcfce7; border: 1px solid #86efac; padding: 0.6rem; margin-bottom: 1rem; }
+    input, textarea { width: 100%; margin-top: 0.2rem; margin-bottom: 0.8rem; }
+    button { background: #2563eb; color: white; border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <h1><a href="{{ url_for('index') }}" style="text-decoration:none;color:#1e293b;">Job Application Assistant MVP</a></h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</body>
+</html>
